@@ -1,0 +1,34 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #333333;
+    color: #FFFFFF;
+}
+
+.container {
+    width: 50%;
+}
+
+select.form-control {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+.btn-primary {
+    font-size: 2em;
+    padding: 10px 20px;
+    background-color: #087216;
+    color: #FFFFFF;
+}
+
+.btn-reload {
+    font-size: 2em;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: #FFFFFF;
+    margin-left: 20px;
+}

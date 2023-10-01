@@ -1,11 +1,10 @@
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
-    {% if correct_guess %}
-    <p style="color: green; font-size: 20px;">You got it exactly right!</p>
-    {% else %}
-    <p style="color: red; font-size: 20px;">You were {{ num_verses }} away from the correct answer, which was {{ book }}
-        {{
-        chapter }}:{{ verse }}!</p>
-    {% endif %}
-    <button style="background-color: blue; color: white; font-size: 18px; margin-top: 20px;" onclick="location.href='/'"
-        class="btn btn-primary">Play Again</button>
-</div>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+{% if correct_guess %}
+<p style="color: green; font-size: 20px;">You got it exactly right!</p>
+{% else %}
+<p style="color: red; font-size: 20px;">You were {{ num_verses }} away from the correct answer, which was {{ book }}
+    {{
+    chapter }}:{{ verse }}!</p>
+{% endif %}
+<button style="background-color: blue; color: white; font-size: 18px; margin-top: 20px;" onclick="location.href='/'"
+    class="btn btn-primary">&#x21BA; Play Again</button>

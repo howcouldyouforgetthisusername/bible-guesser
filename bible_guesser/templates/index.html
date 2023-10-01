@@ -1,26 +1,16 @@
-<style>
-    body,
-    html {
-        height: 100%;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .container {
-        width: 50%;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 
 <div class="container" style="text-align:center;">
+    <div style="text-align:center; margin-bottom:20px;">
+        <button onclick="location.reload();" class="btn btn-reload">&#x21BA; New Verse</button>
+    </div>
     <div class="row">
         <div class="col-md-12">
-            <div style="font-size:larger;">{{ verse_text }}</div>
+            <div style="font-size:3em;">{{ verse_text }}</div>
             <form method="POST" action="{{ url_for('guess') }}">
                 <div class="form-group">
                     <label for="book">Book</label>
-                    <select class="form-control" id="book" name="book">
+                    <select class="form-control" id="book" name="book" style="font-size:1.5em;">
                         {% for book in books %}
                         <option value="{{ book }}">{{ book }}</option>
                         {% endfor %}
@@ -28,13 +18,13 @@
                 </div>
                 <div class="form-group">
                     <label for="chapter">Chapter</label>
-                    <select class="form-control" id="chapter" name="chapter">
+                    <select class="form-control" id="chapter" name="chapter" style="font-size:1.5em;">
                         <!-- Populate chapters dynamically using JavaScript -->
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="verse">Verse</label>
-                    <select class="form-control" id="verse" name="verse">
+                    <select class="form-control" id="verse" name="verse" style="font-size:1.5em;">
                         <!-- Populate verses dynamically using JavaScript -->
                     </select>
                 </div>
