@@ -1,0 +1,6 @@
+{% if correct_guess %}
+<p>You got it exactly right!</p>
+{% else %}
+<p>You were {{ num_verses }} away from the correct answer, which was {{ book }} {{ chapter }}:{{ verse }}!</p>
+{% endif %}
+<button onclick="location.href='/'" class="btn btn-primary">Play Again</button>

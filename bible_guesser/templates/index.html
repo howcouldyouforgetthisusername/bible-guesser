@@ -1,0 +1,102 @@
+<div class="container" style="text-align:center;">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div style="font-size:larger;">{{ verse_text }}</div>
+            <form method="POST" action="{{ url_for('guess') }}">
+                <div class="form-group">
+                    <label for="book">Book</label>
+                    <select class="form-control" id="book" name="book">
+                        {% for book in books %}
+                        <option value="{{ book }}">{{ book }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="chapter">Chapter</label>
+                    <select class="form-control" id="chapter" name="chapter">
+                        <!-- Populate chapters dynamically using JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="verse">Verse</label>
+                    <select class="form-control" id="verse" name="verse">
+                        <!-- Populate verses dynamically using JavaScript -->
+                    </select>
+                </div>
+                <!-- Add hidden input fields for book, chapter, and verse -->
+                <input type="hidden" name="actual_book" id="actual_book" value="{{ book }}">
+                <input type="hidden" name="actual_chapter" id="actual_chapter" value="{{ chapter }}">
+                <input type="hidden" name="actual_verse" id="actual_verse" value="{{ verse }}">
+                <button type="submit" class="btn btn-primary">Guess</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get the Bible data from the server
+    let bible;
+    fetch('/bible')
+        .then(response => response.json())
+        .then(data => {
+            bible = data;
+            setupEventListeners();
+        })
+        .catch(error => console.error('Error:', error));
+
+    function setupEventListeners() {
+        // Get the book, chapter, and verse dropdown elements
+        const bookDropdown = document.getElementById('book');
+        const chapterDropdown = document.getElementById('chapter');
+        const verseDropdown = document.getElementById('verse');
+
+        // Add event listener to book dropdown
+        bookDropdown.addEventListener('change', populateChapters);
+
+        function populateChapters() {
+            // Get the selected book value
+            const selectedBook = bookDropdown.value;
+
+            // Clear chapter and verse dropdowns
+            chapterDropdown.innerHTML = '';
+            verseDropdown.innerHTML = '';
+
+            // Populate chapter dropdown based on the selected book
+            const chapters = Object.keys(bible.books[selectedBook].chapters);
+            for (const chapter of chapters) {
+                const option = document.createElement('option');
+                option.value = chapter;
+                option.textContent = chapter;
+                chapterDropdown.appendChild(option);
+            }
+        }
+
+        // Call the function initially
+        populateChapters();
+
+        // Add event listener to chapter dropdown
+        chapterDropdown.addEventListener('change', populateVerses);
+        bookDropdown.addEventListener('change', populateVerses);
+
+        function populateVerses() {
+            // Get the selected book and chapter values
+            const selectedBook = bookDropdown.value;
+            const selectedChapter = chapterDropdown.value;
+
+            // Clear verse dropdown
+            verseDropdown.innerHTML = '';
+
+            // Populate verse dropdown based on the selected book and chapter
+            const verses = Object.keys(bible.books[selectedBook].chapters[selectedChapter].verses);
+            for (const verse of verses) {
+                const option = document.createElement('option');
+                option.value = verse;
+                option.textContent = verse;
+                verseDropdown.appendChild(option);
+            }
+        }
+
+        // Call the function initially
+        populateVerses();
+    }
+</script>

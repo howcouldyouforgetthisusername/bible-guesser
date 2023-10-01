@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 from typing import Optional
 
 from bible_guesser.loader import read_kjv_text
@@ -82,42 +83,62 @@ class Verse:
         self.text = text
         self.number = number
 
+    def to_dict(self):
+        return {"text": self.text, "number": self.number}
+
 
 class Chapter:
-    verses: list[Verse]
+    verses: OrderedDict[int, Verse]
     number: int
+    num_verses: int
 
-    def __init__(self, *, number: int, verses: list[Verse]):
+    def __init__(self, *, number: int, verses: OrderedDict[int, Verse]):
         self.number = number
         self.verses = verses
+        self.num_verses = len(verses)
+
+    def __getitem__(self, key: int) -> Verse:
+        return self.verses[key]
+
+    def to_dict(self):
+        return {
+            "number": self.number,
+            "num_verses": self.num_verses,
+            "verses": {k: v.to_dict() for k, v in self.verses.items()},
+        }
 
 
 class Book:
-    chapters: list[Chapter]
+    chapters: OrderedDict[int, Chapter]
     title: str
+    num_verses: int
 
     def __init__(self, title: str, text: str):
         self.title = title
         self.chapters = self._load_chapters(text)
+        self.num_verses = sum([chapter.num_verses for chapter in self.chapters.values()])
 
-    def _load_chapters(self, text: str) -> list[Chapter]:
+    def __getitem__(self, key: int) -> Chapter:
+        return self.chapters[key]
+
+    def _load_chapters(self, text: str) -> OrderedDict[int, Chapter]:
         curr_chapter = 1
         curr_verse = 1
-        chapters: list[Chapter] = []
+        chapters: OrderedDict[int, Chapter] = OrderedDict()
         while True:
-            verses = []
+            verses = OrderedDict()
             curr_verse = 1
             while True:
                 verse, end_idx = self._get_verse(text, curr_chapter, curr_verse)
                 if verse is None:
                     break
-                verses.append(verse)
+                verses[curr_verse] = verse
                 curr_verse += 1
                 if end_idx is not None:
                     text = text[end_idx:]  # Remove the verse we just loaded for efficiency
             if len(verses) == 0:
                 break
-            chapters.append(Chapter(number=curr_chapter, verses=verses))
+            chapters[curr_chapter] = Chapter(number=curr_chapter, verses=verses)
             curr_chapter += 1
         return chapters
 
@@ -145,27 +166,44 @@ class Book:
         verse_text = re.sub(r"\s+", " ", verse_text)
         return Verse(text=verse_text, number=verse), verse_end
 
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "num_verses": self.num_verses,
+            "chapters": {k: v.to_dict() for k, v in self.chapters.items()},
+        }
+
 
 class Bible:
-    books: list[Book]
-    text: str
+    books: OrderedDict[str, Book]
+    num_verses: int
 
     def __init__(self):
         import time
 
         start_time = time.time()
         self.books = self._load_books(read_kjv_text())
+        self.num_verses = sum([book.num_verses for book in self.books.values()])
         print(f"Loaded Bible in {time.time() - start_time:.2f} seconds")
 
-    def _load_books(self, text: str) -> list[Book]:
-        books = []
+    def _load_books(self, text: str) -> OrderedDict[str, Book]:
+        books = OrderedDict()
         lines = text.splitlines()
         current_book_start_index = 0
         current_book_title = FIRST_BOOK
         for i, line in enumerate(lines):
             if line in BOOK_TITLES:
-                books.append(Book(current_book_title, "\n".join(lines[current_book_start_index:i])))
+                books[current_book_title] = Book(current_book_title, "\n".join(lines[current_book_start_index:i]))
                 current_book_start_index = i + 1  # Skip the title line
                 current_book_title = BOOK_TITLES[line]
-        books.append(Book(current_book_title, "\n".join(lines[current_book_start_index:])))
+        books[current_book_title] = Book(current_book_title, "\n".join(lines[current_book_start_index:]))
         return books
+
+    def __getitem__(self, key: str) -> Book:
+        return self.books[key]
+
+    def to_dict(self):
+        return {
+            "num_verses": self.num_verses,
+            "books": {k: v.to_dict() for k, v in self.books.items()},
+        }
