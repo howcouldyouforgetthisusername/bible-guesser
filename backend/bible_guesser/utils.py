@@ -16,7 +16,14 @@ def get_random_verse(bible: Bible) -> VerseReference:
 
 
 def get_num_verses_off(
-    bible: Bible, *, book1: str, chapter1: int, verse1: int, book2: str, chapter2: int, verse2: int
+    bible: Bible,
+    *,
+    book1: str,
+    chapter1: int,
+    verse1: int,
+    book2: str,
+    chapter2: int,
+    verse2: int,
 ) -> int:
     """
     Get the number of verses between two verses in the Bible.

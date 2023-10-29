@@ -316,6 +316,20 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-cors"
+version = "4.0.0"
+description = "A Flask extension adding a decorator for CORS support"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask-Cors-4.0.0.tar.gz", hash = "sha256:f268522fcb2f73e2ecdde1ef45e2fd5c71cc48fe03cffb4b441c6d1b40684eb0"},
+    {file = "Flask_Cors-4.0.0-py2.py3-none-any.whl", hash = "sha256:bc3492bfd6368d27cfe79c7821df5a8a319e1a6d5eab277a3794be19bdc51783"},
+]
+
+[package.dependencies]
+Flask = ">=0.9"
+
+[[package]]
 name = "identify"
 version = "2.5.30"
 description = "File identification library for Python"
@@ -853,6 +867,20 @@ files = [
 ]
 
 [[package]]
+name = "types-flask-cors"
+version = "4.0.0.1"
+description = "Typing stubs for Flask-Cors"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-Flask-Cors-4.0.0.1.tar.gz", hash = "sha256:68dbf195dec2a21932690751f6e7669f9eb7def6b15bfaaf507f96cc04bef5ec"},
+    {file = "types_Flask_Cors-4.0.0.1-py3-none-any.whl", hash = "sha256:2846ceaceaf6dbbc023442ff85a15c9c1dbdf3c65fe3ed4b331f5c6b58f81c21"},
+]
+
+[package.dependencies]
+Flask = ">=2.0.0"
+
+[[package]]
 name = "types-requests"
 version = "2.31.0.7"
 description = "Typing stubs for requests"
@@ -1018,4 +1046,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1b3736b307ca0099afc4e1d6492482c468956686c3313fac6cf13a7b28377695"
+content-hash = "ef9d3d95f1ab6a83aaa7489125c297594da2aab7ecea593f4e6ba72f92835111"
