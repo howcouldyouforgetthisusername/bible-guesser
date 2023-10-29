@@ -3,16 +3,16 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: poetry run black --config pyproject.toml
+        entry: bash -c 'cd backend && poetry run black --config pyproject.toml .'
         language: system
         types: [python]
       - id: isort
         name: isort
-        entry: poetry run isort --settings-file pyproject.toml
+        entry: bash -c 'cd backend && poetry run isort --settings-file pyproject.toml .'
         language: system
         types: [python]
       - id: mypy
         name: mypy
-        entry: poetry run mypy --config-file pyproject.toml
+        entry: bash -c 'cd backend && poetry run mypy --config-file pyproject.toml .'
         language: system
         types: [python]
